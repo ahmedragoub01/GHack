@@ -1,8 +1,7 @@
 from datetime import timedelta
 from django.shortcuts import render
 from requests import Response
-from .models import BudgetCategory, Expense, Income, Debt
-from ..counseling.models import Goal
+from .models import  Expense, Income, Debt, Goal
 from django.http import JsonResponse , HttpResponse
 from django.contrib.auth.decorators import login_required
 @login_required
@@ -58,15 +57,24 @@ def edit_goal(request , user_id, goal_id):
 #---------------------------------expenses--------------------------------------#
 
 @login_required
-def get_expenses(request , user_id):
-    expenses = Expense.objects.filter(user=user_id)
-    return render(request, 'Planning/expenses.html', {'expenses': expenses}) 
+def get_expenses(request):
+
+    
+    user = request.user
+    expenses = Expense.objects.filter(user=user)
+    
+    context = {
+        'expenses': expenses
+    }
+
+    return render(request, 'Planning/index.html', context)
 
 @login_required
-def add_expense(request , user_id):
+def add_expense(request):
+    user = request.user
     if request.method == 'POST':
         expense = Expense()
-        expense.user = user_id
+        expense.user = user
         expense.name = request.POST['name']
         expense.amount = request.POST['amount']
         expense.date = request.POST['date']
@@ -78,13 +86,14 @@ def add_expense(request , user_id):
         render(request, 'Planning/add_expense.html')
 
 @login_required
-def delete_expense(request , expense_id):
-    expense = Expense.objects.get(id=expense_id)
+def delete_expense(request):
+    user = request.user
+    expense = Expense.objects.get(user=user)
     expense.delete()
     pass
 
 @login_required
-def edit_expense(request , user_id, expense_id):
+def edit_expense(request , expense_id):
     if request.method == 'POST':
         expense = Expense.objects.get(id=expense_id)
         expense.name = request.POST['name']
@@ -97,18 +106,17 @@ def edit_expense(request , user_id, expense_id):
     else:
         render(request, 'Planning/edit_expense.html')
 
-# Add the login_required decorator to the remaining expense-related views
-
 #---------------------------------income--------------------------------------#
 
 @login_required
-def get_income(request , user_id):
-    income = Income.objects.filter(user=user_id)
+def get_income(request,user):
+    income = Income.objects.filter(user=user)
     return income
 
 @login_required
-def get_total_income(request , user_id):
-    income = get_income(user_id)
+def get_total_income(request):
+    user = request.user
+    income = get_income(user)
     total = 0
     for i in income:
         total += i.amount

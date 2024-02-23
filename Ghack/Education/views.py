@@ -1,12 +1,12 @@
 from django.shortcuts import render
-from .models import Video , Book , Course , Podcast
+from .models import Videos , Books , Courses , Podcasts
 
 
 #-----------------Videos-----------------#
 
 def show_video(request , video_id):
     
-    video = Video.objects.get(video_id = video_id)
+    video = Videos.objects.get(video_id = video_id)
     url = video.link
 
     #get the youtube video info from the url
@@ -16,27 +16,27 @@ def show_video(request , video_id):
 
 def get_videos(request):
     if request.method == 'GET':
-        videos = Video.objects.all()
+        videos = Videos.objects.all()
         return render(request, 'videos.html', {'videos': videos})
     
 #-----------------Books-----------------#
     
 def get_books(request):
     if request.method == 'GET':
-        books = Book.objects.all()
+        books = Books.objects.all()
         return render(request, 'books.html', {'books': books})
     
 #-----------------Courses-----------------#
 
 def get_courses(request):
     if request.method == 'GET':
-        courses = Course.objects.all()
+        courses = Courses.objects.all()
         return render(request, 'courses.html', {'courses': courses})
     
 #-----------------Podcasts-----------------#
     
 def get_podcasts(request):
     if request.method == 'GET':
-        podcasts = Podcast.objects.all()
+        podcasts = Podcasts.objects.all()
         return render(request, 'podcasts.html', {'podcasts': podcasts})
     

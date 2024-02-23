@@ -1,7 +1,7 @@
 from django.contrib import admin
-from .models import BudgetCategory, Expense, Income, Debt
+from .models import Expense, Income, Debt , Goal
 
-admin.site.register(BudgetCategory)
 admin.site.register(Expense)
 admin.site.register(Income)
 admin.site.register(Debt)
+admin.site.register(Goal)

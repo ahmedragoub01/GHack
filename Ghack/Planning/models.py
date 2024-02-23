@@ -1,20 +1,12 @@
-from django.db import models
 
 from django.db import models
 from django.contrib.auth.models import User
 
-class BudgetCategory(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    name = models.CharField(max_length=100)
-    limit = models.DecimalField(max_digits=10, decimal_places=2)
-
-    def __str__(self):
-        return self.name
 
 class Expense(models.Model):
     name = models.CharField(max_length=100)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    category = models.ForeignKey(BudgetCategory, on_delete=models.CASCADE)
+    category = models.CharField(max_length=100)
     type = models.CharField(max_length=100)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     description = models.TextField()
@@ -22,7 +14,7 @@ class Expense(models.Model):
     next = models.DateField()
 
     def __str__(self):
-        return self.description
+        return self.name
 
 class Income(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -44,5 +36,15 @@ class Debt(models.Model):
 
     def __str__(self):
         return self.name
+
+class Goal(models.Model):
+    user = models.ForeignKey(User, related_name='goals', on_delete=models.CASCADE)
+    goal = models.TextField()
+    date_set = models.DateField()
+    completed = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"Goal for {self.user.username}"
+    
 
 
