@@ -1,0 +1,4 @@
+##REST_Framework :
+pip install djangorestframework-jsonapi
+##Autentification :
+pip install djangorestframework-simplejwt
